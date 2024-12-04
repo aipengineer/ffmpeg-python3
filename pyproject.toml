@@ -15,6 +15,7 @@ keywords = [
 dependencies = [
     "pydantic>=2.6.1",
     "typing-extensions>=4.9.0",
+    "future"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
