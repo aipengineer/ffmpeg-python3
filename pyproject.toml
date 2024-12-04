@@ -1,15 +1,110 @@
-[tool.black]
-skip-string-normalization = true
-target_version = ['py27']  # TODO: drop Python 2 support (... "Soon").
-include = '\.pyi?$'
-exclude = '''
-(
-  /(
-      \.eggs
-    | \.git
-    | \.tox
-    | \venv
-    | dist
-  )/
-)
-'''
+[project]
+name = "ffmpeg-python"
+version = "0.2.0"
+description = "Python bindings for FFmpeg - with complex filtering support"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "Apache-2.0"
+authors = [
+    { name = "Karl Kroening", email = "karlk@kralnet.us" },
+]
+keywords = [
+    "FFmpeg", "ffmpeg", "ffprobe", "video", "audio", "streaming", "filter_complex",
+]
+dependencies = [
+    "pydantic>=2.6.1",
+    "typing-extensions>=4.9.0",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Multimedia :: Video",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.10.0",
+    "ruff>=0.1.0",
+    "sphinx>=7.0",
+    "mypy>=1.8.0",
+    "types-setuptools",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ffmpeg"]
+
+[tool.pytest.ini_options]
+testpaths = ["ffmpeg/tests"]
+python_files = "test_*.py"
+addopts = "-v --cov=ffmpeg --cov-report=term-missing --cov-fail-under=90"
+timeout = 30
+
+[tool.coverage.run]
+source = ["ffmpeg"]
+omit = ["*/test_*.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "pass",
+    "raise ImportError",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "TID", # flake8-tidy-imports
+    "UP",  # pyupgrade
+    "RUF", # ruff-specific rules
+    "PT",  # pytest style
+    "TCH", # type-checking imports
+    "PL",  # pylint
+]
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.mypy]
+plugins = [
+    "pydantic.mypy"
+]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
