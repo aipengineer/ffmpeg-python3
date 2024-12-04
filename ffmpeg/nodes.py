@@ -285,22 +285,22 @@ class FilterNode(Node):
         if self.name in ('split', 'asplit'):
             args = [len(outgoing_edges)]
 
-        out_args = [escape_chars(x, '\\\'=:') for x in args]
+        out_args = [escape_chars(x, "\\'=:") for x in args]
         out_kwargs = {}
         for k, v in list(kwargs.items()):
-            k = escape_chars(k, '\\\'=:')
-            v = escape_chars(v, '\\\'=:')
+            k = escape_chars(k, "\\'=:")
+            v = escape_chars(v, "\\'=:")
             out_kwargs[k] = v
 
-        arg_params = [escape_chars(v, '\\\'=:') for v in out_args]
+        arg_params = [escape_chars(v, "\\'=:") for v in out_args]
         kwarg_params = ['{}={}'.format(k, out_kwargs[k]) for k in sorted(out_kwargs)]
         params = arg_params + kwarg_params
 
-        params_text = escape_chars(self.name, '\\\'=:')
+        params_text = escape_chars(self.name, "\\'=:")
 
         if params:
             params_text += '={}'.format(':'.join(params))
-        return escape_chars(params_text, '\\\'[],;')
+        return escape_chars(params_text, "\\'[],;")
 
 
 # noinspection PyMethodOverriding

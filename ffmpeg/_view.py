@@ -41,7 +41,7 @@ def view(stream_spec, detail=False, filename=None, pipe=False, **kwargs):
 
     show_labels = kwargs.pop('show_labels', True)
     if pipe and filename is not None:
-        raise ValueError('Can\'t specify both `filename` and `pipe`')
+        raise ValueError("Can't specify both `filename` and `pipe`")
     elif not pipe and filename is None:
         filename = tempfile.mktemp()
 
@@ -86,7 +86,7 @@ def view(stream_spec, detail=False, filename=None, pipe=False, **kwargs):
                 if up_label is None:
                     up_label = ''
                 if up_selector is not None:
-                    up_label += ":" + up_selector
+                    up_label += ':' + up_selector
                 if down_label is None:
                     down_label = ''
                 if up_label != '' and down_label != '':

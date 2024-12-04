@@ -9,6 +9,9 @@ RED    := $(shell tput -Txterm setaf 1)
 # Python settings
 PYTHON_VERSION = 3.13.0
 VENV_PATH = .venv
+VENV_BIN = $(VENV_PATH)/bin
+PYTHON = $(VENV_BIN)/python
+ACTIVATE = . $(VENV_BIN)/activate
 
 # Help target
 .PHONY: help
@@ -37,49 +40,41 @@ setup: ## Create environment and install dependencies
 	@echo "${BLUE}Using Python ${PYTHON_VERSION}${RESET}"
 	pyenv local ${PYTHON_VERSION}
 	uv venv
-	. ${VENV_PATH}/bin/activate && uv pip install -e ".[dev]"
+	$(ACTIVATE) && uv pip install -e ".[dev]"
 	@echo "${GREEN}Environment created and dependencies installed${RESET}"
 	@echo "${YELLOW}To activate the environment:${RESET}"
 	@echo "${GREEN}source ${VENV_PATH}/bin/activate${RESET}"
-	@echo "${YELLOW}For PyCharm, set the interpreter to:${RESET}"
-	@echo "${GREEN}$(PWD)/${VENV_PATH}/bin/python${RESET}"
-
-.PHONY: install-dev
-install-dev: ## Install package in development mode
-	@echo "${BLUE}Installing package in development mode...${RESET}"
-	uv pip install -e ".[dev]"
-
-.PHONY: test
-test: ## Run tests with coverage
-	@echo "${BLUE}Running tests with coverage...${RESET}"
-	pytest -v --cov=ffmpeg --cov-report=term-missing --cov-fail-under=90
-
-.PHONY: test-fast
-test-fast: ## Run tests without coverage
-	@echo "${BLUE}Running tests (fast mode)...${RESET}"
-	pytest -v
-
-.PHONY: coverage-report
-coverage-report: ## Generate HTML coverage report
-	@echo "${BLUE}Generating coverage report...${RESET}"
-	coverage html
-	@echo "${GREEN}Report generated in htmlcov/index.html${RESET}"
-
-.PHONY: lint
-lint: ## Check style with ruff
-	@echo "${BLUE}Linting code...${RESET}"
-	ruff check .
 
 .PHONY: format
 format: ## Format code with ruff
 	@echo "${BLUE}Formatting code...${RESET}"
-	ruff format .
+	$(ACTIVATE) && ruff format .
+
+.PHONY: lint
+lint: ## Check style with ruff
+	@echo "${BLUE}Linting code...${RESET}"
+	$(ACTIVATE) && ruff check .
 
 .PHONY: typecheck
 typecheck: ## Run static type checking
 	@echo "${BLUE}Running type checking...${RESET}"
-	mypy ffmpeg
-	@echo "${GREEN}Type checking passed!${RESET}"
+	$(ACTIVATE) && mypy ffmpeg
+
+.PHONY: test
+test: ## Run tests with coverage
+	@echo "${BLUE}Running tests with coverage...${RESET}"
+	$(ACTIVATE) && pytest -v --cov=ffmpeg --cov-report=term-missing --cov-fail-under=90
+
+.PHONY: test-fast
+test-fast: ## Run tests without coverage
+	@echo "${BLUE}Running tests (fast mode)...${RESET}"
+	$(ACTIVATE) && pytest -v
+
+.PHONY: coverage-report
+coverage-report: ## Generate HTML coverage report
+	@echo "${BLUE}Generating coverage report...${RESET}"
+	$(ACTIVATE) && coverage html
+	@echo "${GREEN}Report generated in htmlcov/index.html${RESET}"
 
 .PHONY: check
 check: format lint typecheck test ## Run all checks (format, lint, typecheck, test)
@@ -107,7 +102,7 @@ clean: ## Remove all generated files
 .PHONY: docs
 docs: ## Build documentation
 	@echo "${BLUE}Building documentation...${RESET}"
-	$(MAKE) -C doc html
+	$(ACTIVATE) && $(MAKE) -C doc html
 	@echo "${GREEN}Documentation built in doc/html/${RESET}"
 
 .PHONY: structure
@@ -133,6 +128,6 @@ structure: ## Show current project structure
 .PHONY: outdated
 outdated: ## Show outdated packages
 	@echo "${BLUE}Checking for outdated packages...${RESET}"
-	. .venv/bin/activate && uv pip list --outdated
+	$(ACTIVATE) && uv pip list --outdated
 
 .DEFAULT_GOAL := help

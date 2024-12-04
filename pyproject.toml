@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 license = "Apache-2.0"
 authors = [
     { name = "Karl Kroening", email = "karlk@kralnet.us" },
+    { name = "Rod Rivera", email = "rod@aip.engineer" },
 ]
 keywords = [
     "FFmpeg", "ffmpeg", "ffprobe", "video", "audio", "streaming", "filter_complex",

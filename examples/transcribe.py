@@ -14,14 +14,16 @@ logger = logging.getLogger(__file__)
 logger.setLevel(logging.INFO)
 
 
-parser = argparse.ArgumentParser(description='Convert speech audio to text using Google Speech API')
+parser = argparse.ArgumentParser(
+    description='Convert speech audio to text using Google Speech API'
+)
 parser.add_argument('in_filename', help='Input filename (`-` for stdin)')
 
 
 def decode_audio(in_filename, **input_kwargs):
     try:
-        out, err = (ffmpeg
-            .input(in_filename, **input_kwargs)
+        out, err = (
+            ffmpeg.input(in_filename, **input_kwargs)
             .output('-', format='s16le', acodec='pcm_s16le', ac=1, ar='16k')
             .overwrite_output()
             .run(capture_stdout=True, capture_stderr=True)
@@ -38,7 +40,7 @@ def get_transcripts(audio_data):
     config = types.RecognitionConfig(
         encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=16000,
-        language_code='en-US'
+        language_code='en-US',
     )
     response = client.recognize(config, audio)
     return [result.alternatives[0].transcript for result in response.results]

@@ -393,7 +393,7 @@ def drawtext(stream, text=None, x=0, y=0, escape_text=True, **kwargs):
     """
     if text is not None:
         if escape_text:
-            text = escape_chars(text, '\\\'%')
+            text = escape_chars(text, "\\'%")
         kwargs['text'] = text
     if x != 0:
         kwargs['x'] = x

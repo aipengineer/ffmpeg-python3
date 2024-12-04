@@ -33,8 +33,8 @@ def test_escape_chars():
     assert ffmpeg._utils.escape_chars('a:b', ':') == r'a\:b'
     assert ffmpeg._utils.escape_chars('a\\:b', ':\\') == 'a\\\\\\:b'
     assert (
-        ffmpeg._utils.escape_chars('a:b,c[d]e%{}f\'g\'h\\i', '\\\':,[]%')
-        == 'a\\:b\\,c\\[d\\]e\\%{}f\\\'g\\\'h\\\\i'
+        ffmpeg._utils.escape_chars("a:b,c[d]e%{}f'g'h\\i", "\\':,[]%")
+        == "a\\:b\\,c\\[d\\]e\\%{}f\\'g\\'h\\\\i"
     )
     assert ffmpeg._utils.escape_chars(123, ':\\') == '123'
 
@@ -399,7 +399,7 @@ def test_filter_normal_arg_escape():
 
     expected_backslash_counts = {
         'x': 0,
-        '\'': 3,
+        "'": 3,
         '\\': 3,
         '%': 0,
         ':': 2,
@@ -433,7 +433,7 @@ def test_filter_text_arg_str_escape():
 
     expected_backslash_counts = {
         'x': 0,
-        '\'': 7,
+        "'": 7,
         '\\': 7,
         '%': 4,
         ':': 2,

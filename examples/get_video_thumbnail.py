@@ -8,18 +8,19 @@ import sys
 parser = argparse.ArgumentParser(description='Generate video thumbnail')
 parser.add_argument('in_filename', help='Input filename')
 parser.add_argument('out_filename', help='Output filename')
+parser.add_argument('--time', type=int, default=0.1, help='Time offset')
 parser.add_argument(
-    '--time', type=int, default=0.1, help='Time offset')
-parser.add_argument(
-    '--width', type=int, default=120,
-    help='Width of output thumbnail (height automatically determined by aspect ratio)')
+    '--width',
+    type=int,
+    default=120,
+    help='Width of output thumbnail (height automatically determined by aspect ratio)',
+)
 
 
 def generate_thumbnail(in_filename, out_filename, time, width):
     try:
         (
-            ffmpeg
-            .input(in_filename, ss=time)
+            ffmpeg.input(in_filename, ss=time)
             .filter('scale', width, -1)
             .output(out_filename, vframes=1)
             .overwrite_output()
